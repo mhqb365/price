@@ -1,14 +1,10 @@
 <template>
-  <div class="container">
-    <div class="row mt-4">
-      <div class="col-sm-12 col-md-12">
-        <h3 class="display-4 text-primary">Giá mặt định: bitmoon.net</h3>
-      </div>
-    </div>
+  <div class="container bg-white my-5 p-5 rounded-lg shadow">
+    <h1>bitmoon.net fast price</h1>
 
-    <div class="row mt-4">
-      <div class="col-sm-12 col-md-12">
-        <label>Coin</label>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 py-4">
+        <label>coin name</label>
 
         <div class="input-group">
           <input
@@ -19,37 +15,36 @@
           />
 
           <div class="input-group-append">
-            <button type="button" class="btn btn-primary" @click="fetch()">
-              Tìm
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              @click="fetch()"
+            >
+              search
             </button>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="row mt-4">
-      <div class="col-sm-12 col-md-6 text-center">
-        <h5>Giá bán ra</h5>
-
-        <h5 class="border border-success bg-success text-white rounded p-4">
+      <div class="col-sm-12 col-md-6 py-4">
+        <h5>go buy</h5>
+        <h5 class="border border-success text-center rounded p-4">
           <span v-if="isLoading">?</span>
-          <span v-else>{{ Number(sell).toLocaleString() }}</span>
+          <span v-else>{{ Number(sell).toLocaleString() }} vnd</span>
         </h5>
       </div>
 
-      <div class="col-sm-12 col-md-6 text-center">
-        <h5>Giá mua vào</h5>
-        <h5 class="border border-danger bg-danger text-white rounded p-4">
+      <div class="col-sm-12 col-md-6 py-4">
+        <h5>go sell</h5>
+        <h5 class="border border-danger text-center rounded p-4">
           <span v-if="isLoading">?</span>
-          <span v-else>{{ Number(buy).toLocaleString() }}</span>
+          <span v-else>{{ Number(buy).toLocaleString() }} vnd</span>
         </h5>
       </div>
-    </div>
 
-    <div class="row mt-4">
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-6 py-4">
         <div class="form-group">
-          <label>Lệch giá bán ra</label>
+          <label>profit buy</label>
           <input
             type="number"
             class="form-control"
@@ -57,25 +52,9 @@
             @change="calculator('coinToVnd')"
           />
         </div>
-      </div>
 
-      <div class="col-sm-12 col-md-6">
+        <label>amount coin</label>
         <div class="form-group">
-          <label>Lệch giá mua vào</label>
-          <input
-            type="number"
-            class="form-control"
-            v-model="changeBuy"
-            @change="calculator('coinToVnd')"
-          />
-        </div>
-      </div>
-
-      <div class="col-sm-12 col-md-6">
-        <h3>Bán ra</h3>
-
-        <label>Coin</label>
-        <div class="input-group">
           <input
             type="number"
             class="form-control"
@@ -84,8 +63,8 @@
           />
         </div>
 
-        <label>Vnd</label>
-        <div class="input-group">
+        <label>amount vnd</label>
+        <div class="form-group">
           <input
             type="number"
             class="form-control"
@@ -95,11 +74,19 @@
         </div>
       </div>
 
-      <div class="col-sm-12 col-md-6">
-        <h3>Mua vào</h3>
+      <div class="col-sm-12 col-md-6 py-4">
+        <div class="form-group">
+          <label>profit sell</label>
+          <input
+            type="number"
+            class="form-control"
+            v-model="changeBuy"
+            @change="calculator('coinToVnd')"
+          />
+        </div>
 
-        <label>Coin</label>
-        <div class="input-group">
+        <label>amount coin</label>
+        <div class="form-group">
           <input
             type="number"
             class="form-control"
@@ -108,8 +95,8 @@
           />
         </div>
 
-        <label>Vnd</label>
-        <div class="input-group">
+        <label>amount vnd</label>
+        <div class="form-group">
           <input
             type="number"
             class="form-control"
@@ -129,7 +116,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      coin: "doge",
+      coin: "tron",
       buy: 0,
       changeBuy: 0,
       sell: 0,
@@ -152,19 +139,14 @@ export default {
         method: "POST",
         data: {
           query:
-            "\n    query getPriceBookPaging ($page_size: Int, $page: Int, $sort_name: String, $sort_type: String, $search: String) {\n      apiPricebookPaging (page_size: $page_size, page: $page, sort_name: $sort_name, sort_type: $sort_type, search: $search){\n        total,\n        data {\n        id,\n        coin_id,\n        coin_name,\n        bid_price_usd,\n        fast_bid_price,\n        ask_price_usd,\n        bid_price_btc,\n        ask_price_btc,\n        bid_price_vnd,\n        ask_price_vnd,\n        fast_ask_price,\n        fast,\n        normal,\n        sort_no,\n        buy_profit,\n        sell_profit,\n        change_24h,\n        volume,\n        coin\n      }\n    }\n  }\n",
-          variables: {
-            page_size: 50,
-            page: 1,
-            sort_name: "volume",
-            sort_type: "desc",
-            search: this.coin,
-          },
+            "\n    query getPriceBook ($coin_id: String) {\n      apiPricebook (coin_id: $coin_id){\n        coin_id,\n        bid_price_vnd,\n        fast_bid_price,\n        fast_ask_price,\n        ask_price_vnd,\n        fast,\n        normal,\n        is_direct,\n        broker_code,\n        change_24h,\n        volume,\n        coin,\n        trade_buy_fee,\n        trade_sell_fee,\n        base_currency\n      }\n    }\n  ",
+          variables: { coin_id: this.coin },
         },
       }).then((response) => {
         this.isLoading = !this.isLoading;
-        // console.log(response.data.data.apiPricebookPaging.data[0]);
-        let result = response.data.data.apiPricebookPaging.data[0];
+        let res = response.data;
+        console.log(res);
+        let result = res.data.apiPricebook[0];
         this.buy = result.fast_bid_price;
         this.sell = result.fast_ask_price;
       });
