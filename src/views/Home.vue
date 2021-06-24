@@ -1,6 +1,6 @@
 <template>
   <div class="container bg-white my-5 p-5 rounded-lg shadow">
-    <h1>bitmoon.net fast price</h1>
+    <h1>price</h1>
 
     <div class="row">
       <div class="col-sm-12 col-md-12 py-4">
