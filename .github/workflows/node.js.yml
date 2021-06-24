@@ -26,3 +26,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn
+    - run: yarn build
+    - run: rm -rf public
+    - run: mv dist public
