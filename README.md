@@ -1,4 +1,4 @@
-# rate
+# price
 
 > A Vue.js project
 
